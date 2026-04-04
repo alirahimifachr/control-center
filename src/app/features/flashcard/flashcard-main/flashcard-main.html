@@ -32,13 +32,11 @@
       </div>
       <div class="card-footer bg-transparent">
         <small class="text-body-secondary">{{ deck.total }} cards</small>
-        <div class="d-flex gap-1 mt-1">
+        <div class="mt-1">
           @for (b of boxes; track b) {
             <span
-              class="badge"
-              [class]="
-                deck.box_counts[b] ? 'bg-secondary' : 'bg-body-tertiary text-body-secondary'
-              "
+              class="badge mt-2"
+              [class]="deck.box_counts[b] ? 'bg-secondary' : 'bg-body-tertiary text-body-secondary'"
               >{{ boxLabels[b] }}: {{ deck.box_counts[b] || 0 }}</span
             >
           }

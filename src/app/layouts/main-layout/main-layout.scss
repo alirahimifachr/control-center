@@ -1,0 +1,52 @@
+#sidebar {
+  width: 90px;
+
+  .offcanvas-body {
+    height: 100dvh;
+  }
+
+  .nav-link {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.5rem;
+    font-size: 0.7rem;
+    border-radius: 0.5rem;
+    color: var(--bs-body-color);
+
+    i {
+      font-size: 1.25rem;
+    }
+
+    &:hover {
+      background-color: var(--bs-tertiary-bg);
+    }
+
+    &.active {
+      background-color: transparent;
+      color: var(--bs-primary);
+      font-weight: 600;
+    }
+  }
+}
+
+@media (max-width: 991.98px) {
+  #sidebar {
+    width: 220px;
+
+    .nav-link {
+      flex-direction: row;
+      font-size: 0.875rem;
+      padding: 0.5rem 0.75rem;
+
+      i {
+        font-size: 1rem;
+      }
+
+      &.active {
+        background-color: var(--bs-primary);
+        color: #fff;
+      }
+    }
+  }
+}

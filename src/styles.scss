@@ -1,0 +1,19 @@
+@use 'bootstrap/scss/bootstrap' with (
+  $primary: #d337c6,
+  $secondary: #6c63ff,
+  $info: #2196f3,
+  $success: #4caf50,
+  $warning: #ff9800,
+  $danger: #f44336,
+  $light: #f5f1fb,
+  $dark: #1a1028,
+  $min-contrast-ratio: 2
+);
+
+.sticky-top {
+  top: env(safe-area-inset-top);
+}
+
+.offcanvas-start {
+  padding-top: env(safe-area-inset-top);
+}

@@ -1,0 +1,5 @@
+export const environment = {
+  production: false,
+  supabaseUrl: 'http://172.23.130.82:54321',
+  supabaseAnonKey: '<anon key from supabase start>',
+};

@@ -1,0 +1,49 @@
+<div class="d-flex align-items-center mb-4">
+  <h4 class="mb-0">Decks</h4>
+  <a routerLink="deck" class="btn btn-outline-success ms-auto">
+    <i class="bi bi-plus-lg me-1"></i>New Deck
+  </a>
+</div>
+
+@if (error()) {
+  <div class="alert alert-danger">{{ error() }}</div>
+}
+
+@if (decks.isLoading()) {
+  <div class="text-center py-5">
+    <span class="spinner-border"></span>
+  </div>
+} @else if (!decks.hasValue()) {
+  <p class="text-body-secondary">No decks yet. Create one to get started.</p>
+} @else {
+  @for (deck of decks.value(); track deck.id) {
+    <div class="card mb-3">
+      <div class="card-body d-flex align-items-center">
+        <div>
+          <h6 class="mb-1">{{ deck.name }}</h6>
+          <small class="text-body-secondary">{{ deck.description }}</small>
+        </div>
+        <div class="ms-auto d-flex gap-2">
+          <a [routerLink]="['deck', deck.id, 'browse']" class="btn btn-sm btn-success">Browse</a>
+          <a [routerLink]="['deck', deck.id, 'study']" class="btn btn-sm btn-primary">Study</a>
+          <a [routerLink]="['deck', deck.id]" class="btn btn-sm btn-outline-secondary">Edit</a>
+          <button class="btn btn-sm btn-outline-danger" (click)="delete(deck.id)">Delete</button>
+        </div>
+      </div>
+      <div class="card-footer bg-transparent">
+        <small class="text-body-secondary">{{ deck.total }} cards</small>
+        <div class="d-flex gap-1 mt-1">
+          @for (b of boxes; track b) {
+            <span
+              class="badge"
+              [class]="
+                deck.box_counts[b] ? 'bg-secondary' : 'bg-body-tertiary text-body-secondary'
+              "
+              >{{ boxLabels[b] }}: {{ deck.box_counts[b] || 0 }}</span
+            >
+          }
+        </div>
+      </div>
+    </div>
+  }
+}

@@ -1,0 +1,106 @@
+<a [routerLink]="['/flashcard/deck', deckId, 'browse']" class="btn btn-link px-0 mb-2">
+  <i class="bi bi-arrow-left me-1"></i>Back to deck
+</a>
+<h4 class="mb-4">Study Session</h4>
+
+@if (error()) {
+  <div class="alert alert-danger">{{ error() }}</div>
+}
+
+@if (cards.isLoading()) {
+  <div class="text-center py-5">
+    <span class="spinner-border"></span>
+  </div>
+} @else if (!done()) {
+  @let card = currentCard();
+  @if (card) {
+    <div class="progress mb-4">
+      <div class="progress-bar" [style.width.%]="progress()">
+        {{ currentIndex() + 1 }} / {{ cards.value()!.length }}
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <small class="text-body-secondary">{{ card.box | boxLabel }}</small>
+        <hr />
+        <div class="mb-3" [innerHTML]="card.front | markdown"></div>
+
+        <div class="text-center mb-3">
+          <button class="btn btn-primary" (click)="revealed.set(true)" [disabled]="revealed()">
+            Reveal Answer
+            <small class="text-body-secondary ms-2">(Space)</small>
+          </button>
+        </div>
+
+        <hr />
+        @if (revealed()) {
+          <div class="mb-3" [innerHTML]="card.back | markdown"></div>
+        }
+
+        <div class="d-flex justify-content-center gap-3">
+          <button class="btn btn-outline-secondary" (click)="skip()">
+            <i class="bi bi-skip-forward me-1"></i>Skip
+            <small class="text-body-secondary ms-1">(&darr;)</small>
+          </button>
+          <button class="btn btn-danger" (click)="demote()" [disabled]="!revealed()">
+            <i class="bi bi-x-lg me-1"></i>Missed
+            <small class="text-body-secondary ms-1">(&larr;)</small>
+          </button>
+          <button class="btn btn-success" (click)="promote()" [disabled]="!revealed()">
+            <i class="bi bi-check-lg me-1"></i>Got it
+            <small class="text-body-secondary ms-1">(&rarr;)</small>
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+} @else {
+  <div class="card">
+    <div class="card-body text-center">
+      <h5 class="mb-3">Session Complete</h5>
+      <div class="d-flex justify-content-center gap-4 mb-3">
+        <div>
+          <strong>{{ promoted() + demoted() }}</strong>
+          <br />
+          <small class="text-body-secondary">Reviewed</small>
+        </div>
+        <div>
+          <strong>{{ promoted() }}</strong>
+          <br />
+          <small class="text-success">Promoted</small>
+        </div>
+        <div>
+          <strong>{{ demoted() }}</strong>
+          <br />
+          <small class="text-danger">Demoted</small>
+        </div>
+      </div>
+      <a [routerLink]="['/flashcard/deck', deckId, 'browse']" class="btn btn-primary">Back to Deck</a>
+    </div>
+  </div>
+}
+
+@if (drawMode()) {
+  <canvas
+    appWhiteboard
+    class="position-fixed top-0 start-0 w-100 h-100"
+    style="z-index: 1050; touch-action: none"
+  ></canvas>
+}
+
+<div class="position-fixed d-flex gap-2" style="bottom: 16px; right: 16px; z-index: 1051">
+  @if (drawMode()) {
+    <button class="btn btn-outline-danger rounded-circle p-2 lh-1" (click)="whiteboard()?.clear()">
+      <i class="bi bi-eraser fs-5"></i>
+    </button>
+  }
+  <button
+    class="btn rounded-circle p-2 lh-1"
+    [class.btn-primary]="drawMode()"
+    [class.btn-outline-secondary]="!drawMode()"
+    (click)="drawMode.set(!drawMode())"
+  >
+    <i class="bi fs-5" [class.bi-pencil]="!drawMode()" [class.bi-x-lg]="drawMode()"></i>
+  </button>
+</div>

@@ -1,0 +1,13 @@
+appId: com.controlcenter.app
+productName: Control Center
+directories:
+  output: release
+files:
+  - dist/control-center/browser/**/*
+  - electron/**/*
+linux:
+  target:
+    - target: AppImage
+      arch:
+        - x64
+  category: Utility

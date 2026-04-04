@@ -1,0 +1,101 @@
+<header class="d-lg-none sticky-top bg-body border-bottom px-3 py-2">
+  <button
+    class="btn btn-sm border-0"
+    type="button"
+    data-bs-toggle="offcanvas"
+    data-bs-target="#sidebar"
+    aria-controls="sidebar"
+  >
+    <i class="bi bi-list fs-5"></i>
+  </button>
+</header>
+
+<div class="d-flex">
+  <nav
+    id="sidebar"
+    class="offcanvas-lg offcanvas-start border-end bg-body"
+    tabindex="-1"
+    aria-label="Main navigation"
+  >
+    <div class="offcanvas-body d-flex flex-column p-0">
+      <ul class="nav flex-column gap-1 p-2 flex-grow-1">
+        <li class="nav-item">
+          <a
+            class="nav-link d-flex"
+            routerLink="/dashboard"
+            routerLinkActive="active"
+            data-bs-dismiss="offcanvas"
+            data-bs-target="#sidebar"
+            #dashboardRla="routerLinkActive"
+          >
+            @if (dashboardRla.isActive) {
+              <i class="bi bi-house-fill"></i>
+            } @else {
+              <i class="bi bi-house"></i>
+            }
+            Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link d-flex"
+            routerLink="/flashcard"
+            routerLinkActive="active"
+            data-bs-dismiss="offcanvas"
+            data-bs-target="#sidebar"
+            #flashcardRla="routerLinkActive"
+          >
+            @if (flashcardRla.isActive) {
+              <i class="bi bi-book-fill"></i>
+            } @else {
+              <i class="bi bi-book"></i>
+            }
+            Flashcard
+          </a>
+        </li>
+      </ul>
+
+      <ul class="nav flex-column gap-1 p-2 border-top mt-auto">
+        <li class="nav-item">
+          <button class="nav-link d-flex w-100 border-0 bg-transparent" (click)="toggleTheme()">
+            @if (isDark()) {
+              <i class="bi bi-sun-fill"></i>
+            } @else {
+              <i class="bi bi-moon-fill"></i>
+            }
+            {{ isDark() ? 'Light' : 'Dark' }}
+          </button>
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link d-flex"
+            routerLink="/settings"
+            routerLinkActive="active"
+            data-bs-dismiss="offcanvas"
+            data-bs-target="#sidebar"
+            #settingsRla="routerLinkActive"
+          >
+            @if (settingsRla.isActive) {
+              <i class="bi bi-gear-fill"></i>
+            } @else {
+              <i class="bi bi-gear"></i>
+            }
+            Settings
+          </a>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link d-flex w-100 border-0 bg-transparent" (click)="logout()">
+            <i class="bi bi-box-arrow-left"></i>
+            Logout
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="flex-grow-1 overflow-auto vh-100">
+    <div class="container py-3" style="max-width: 960px">
+      <router-outlet />
+    </div>
+  </main>
+</div>

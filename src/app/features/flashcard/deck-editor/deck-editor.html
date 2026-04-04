@@ -1,0 +1,64 @@
+<a routerLink="/flashcard" class="btn btn-link px-0 mb-2">
+  <i class="bi bi-arrow-left me-1"></i>Back to decks
+</a>
+<h4 class="mb-4">{{ deckId ? 'Edit Deck' : 'New Deck' }}</h4>
+
+@if (error()) {
+  <div class="alert alert-danger">{{ error() }}</div>
+}
+
+@if (deck.isLoading()) {
+  <div class="text-center py-5">
+    <span class="spinner-border"></span>
+  </div>
+} @else {
+  <form (submit)="onSubmit($event)" novalidate>
+    <div class="mb-3">
+      <label for="name" class="form-label">Name</label>
+      <input
+        type="text"
+        id="name"
+        class="form-control"
+        [formField]="deckForm.name"
+        [class.is-invalid]="deckForm.name().touched() && deckForm.name().invalid()"
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="description" class="form-label">Description</label>
+      <textarea
+        id="description"
+        class="form-control"
+        rows="3"
+        [formField]="deckForm.description"
+      ></textarea>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-6">
+        <label for="newCards" class="form-label">New cards per session</label>
+        <input
+          type="number"
+          id="newCards"
+          class="form-control"
+          [formField]="deckForm.new_cards_per_session"
+        />
+      </div>
+      <div class="col-6">
+        <label for="reviewCards" class="form-label">Review cards per session</label>
+        <input
+          type="number"
+          id="reviewCards"
+          class="form-control"
+          [formField]="deckForm.review_cards_per_session"
+        />
+      </div>
+    </div>
+    <div class="d-flex justify-content-end gap-2 mb-3">
+      <a routerLink="/flashcard" class="btn btn-outline-secondary">Cancel</a>
+      <button type="submit" class="btn btn-primary">
+        {{ deckId ? 'Update' : 'Create' }}
+      </button>
+    </div>
+  </form>
+}

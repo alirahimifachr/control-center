@@ -13,7 +13,8 @@ export class MainLayout {
   private router = inject(Router);
 
   isDark = signal(
-    (localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')) === 'dark',
+    (localStorage.getItem('theme') ||
+      (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')) === 'dark',
   );
 
   toggleTheme() {

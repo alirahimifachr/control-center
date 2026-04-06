@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
-import { Auth } from '../../../../core/services/auth/auth';
-import { Supabase } from '../../../../core/services/supabase/supabase';
+import { Auth } from '../../../core/services/auth/auth';
+import { Supabase } from '../../../core/services/supabase/supabase';
 import { Deck, DeckWithStats } from '../../models/deck';
 
 @Injectable({

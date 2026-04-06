@@ -1,10 +1,10 @@
 import { Component, inject, linkedSignal, resource, signal } from '@angular/core';
 import { form, FormField, max, min, required, submit } from '@angular/forms/signals';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { MAX_BOX, MIN_BOX, type Box } from '../../../shared/models/box';
+import { Card } from '../../../shared/models/card';
 import { MarkdownPipe } from '../../../shared/pipes/markdown-pipe';
-import { MAX_BOX, MIN_BOX, type Box } from '../models/box';
-import { Card } from '../models/card';
-import { CardService } from '../services/card/card.service';
+import { CardService } from '../../../shared/services/card/card.service';
 
 @Component({
   selector: 'app-card-editor',

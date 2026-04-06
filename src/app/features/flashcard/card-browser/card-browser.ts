@@ -1,10 +1,10 @@
 import { Component, computed, inject, resource, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { BOXES, type Box } from '../../../shared/models/box';
+import { BoxLabelPipe } from '../../../shared/pipes/box-label-pipe';
 import { MarkdownPipe } from '../../../shared/pipes/markdown-pipe';
-import { BOXES, type Box } from '../models/box';
-import { BoxLabelPipe } from '../pipes/box-label-pipe';
-import { CardService } from '../services/card/card.service';
-import { DeckService } from '../services/deck/deck.service';
+import { CardService } from '../../../shared/services/card/card.service';
+import { DeckService } from '../../../shared/services/deck/deck.service';
 
 @Component({
   selector: 'app-card-browser',

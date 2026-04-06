@@ -1,8 +1,8 @@
 import { Component, inject, linkedSignal, resource, signal } from '@angular/core';
 import { form, FormField, min, required, submit } from '@angular/forms/signals';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { Deck } from '../models/deck';
-import { DeckService } from '../services/deck/deck.service';
+import { Deck } from '../../../shared/models/deck';
+import { DeckService } from '../../../shared/services/deck/deck.service';
 
 @Component({
   selector: 'app-deck-editor',

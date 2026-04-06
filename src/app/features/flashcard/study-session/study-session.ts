@@ -9,9 +9,9 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Whiteboard } from '../../../shared/directives/whiteboard';
+import { BoxLabelPipe } from '../../../shared/pipes/box-label-pipe';
 import { MarkdownPipe } from '../../../shared/pipes/markdown-pipe';
-import { BoxLabelPipe } from '../pipes/box-label-pipe';
-import { CardService } from '../services/card/card.service';
+import { CardService } from '../../../shared/services/card/card.service';
 
 @Component({
   selector: 'app-study-session',

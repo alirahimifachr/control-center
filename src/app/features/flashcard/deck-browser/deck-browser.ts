@@ -1,7 +1,7 @@
 import { Component, inject, resource, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { BOXES, BOX_SHORT_LABELS } from '../models/box';
-import { DeckService } from '../services/deck/deck.service';
+import { BOXES, BOX_SHORT_LABELS } from '../../../shared/models/box';
+import { DeckService } from '../../../shared/services/deck/deck.service';
 
 @Component({
   selector: 'app-deck-browser',

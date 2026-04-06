@@ -19,7 +19,12 @@ export const routes: Routes = [
       {
         path: 'flashcard',
         loadChildren: () =>
-          import('./features/flashcard/flashcard.routes').then((m) => m.flashcard_routes),
+          import('./features/flashcard/flashcard.routes').then((r) => r.flashcard_routes),
+      },
+      {
+        path: 'setting',
+        loadChildren: () =>
+          import('./features/settings/setting.routes').then((r) => r.setting_routes),
       },
     ],
   },

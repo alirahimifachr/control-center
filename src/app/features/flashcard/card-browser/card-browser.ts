@@ -43,7 +43,7 @@ export class CardBrowser {
   });
 
   async deleteCard(id: number) {
-    if (!confirm('Delete this card?')) return; // Todo: Use Modal
+    if (!confirm('Delete this card?')) return;
     try {
       await this.cardService.delete(id);
       this.cards.reload();

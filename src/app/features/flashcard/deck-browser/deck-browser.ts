@@ -23,7 +23,7 @@ export class DeckBrowser {
   });
 
   async delete(id: number) {
-    if (!confirm('Delete this deck and all its cards?')) return; // Todo: Use Modal
+    if (!confirm('Delete this deck and all its cards?')) return;
     try {
       await this.deckService.delete(id);
       this.decks.reload();

@@ -1,1 +1,55 @@
-<p>tags works!</p>
+@if (error()) {
+  <div class="alert alert-danger">{{ error() }}</div>
+}
+
+<form (submit)="onSubmit($event)" novalidate>
+  <div class="input-group mb-3">
+    <input
+      type="text"
+      class="form-control"
+      placeholder="New tag name"
+      [formField]="tagForm.name"
+      [class.is-invalid]="tagForm.name().touched() && tagForm.name().invalid()"
+    />
+    <button type="submit" class="btn btn-outline-success">
+      <i class="bi bi-plus-lg me-1"></i>Add
+    </button>
+  </div>
+</form>
+
+@if (tags.isLoading()) {
+  <div class="text-center py-3">
+    <span class="spinner-border spinner-border-sm"></span>
+  </div>
+} @else if (!tags.hasValue() || tags.value()!.length === 0) {
+  <p class="text-body-secondary">No tags yet.</p>
+} @else {
+  <div class="d-flex flex-wrap gap-2">
+    @for (tag of tags.value(); track tag.id) {
+      @if (editingTagId() === tag.id) {
+        <div class="input-group input-group-sm" style="width: auto">
+          <input
+            type="text"
+            class="form-control"
+            [value]="editName()"
+            (input)="onEditInput($event)"
+            (keyup.enter)="save(tag.id)"
+            (keyup.escape)="cancel()"
+          />
+          <button class="btn btn-outline-success" (click)="save(tag.id)">
+            <i class="bi bi-check-lg"></i>
+          </button>
+          <button class="btn btn-outline-secondary" (click)="cancel()">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+      } @else {
+        <span class="badge bg-info fw-normal d-flex align-items-center gap-1">
+          {{ tag.name }}
+          <i class="bi bi-pencil ms-1" role="button" (click)="edit(tag)"></i>
+          <i class="bi bi-x-lg ms-1" role="button" (click)="delete(tag.id)"></i>
+        </span>
+      }
+    }
+  </div>
+}

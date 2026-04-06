@@ -1,4 +1,4 @@
-import { Component, inject, resource, signal } from '@angular/core';
+import { Component, computed, inject, resource, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MarkdownPipe } from '../../../shared/pipes/markdown-pipe';
 import { BOXES, type Box } from '../models/box';
@@ -21,6 +21,7 @@ export class CardBrowser {
   readonly boxes: readonly (Box | undefined)[] = [undefined, ...BOXES];
 
   readonly selectedBox = signal<Box | undefined>(undefined);
+  readonly filter = signal('');
   readonly error = signal('');
 
   readonly deck = resource({
@@ -34,6 +35,11 @@ export class CardBrowser {
       params.box != null
         ? this.cardService.getBoxCards(params.deckId, params.box)
         : this.cardService.query(params.deckId),
+  });
+
+  readonly filteredCards = computed(() => {
+    const q = this.filter().toLowerCase().trim();
+    return (this.cards.value() ?? []).filter((c) => !q || c.front.toLowerCase().includes(q));
   });
 
   async deleteCard(id: number) {

@@ -7,7 +7,7 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Whiteboard } from '../../../shared/directives/whiteboard';
 import { MarkdownPipe } from '../../../shared/pipes/markdown-pipe';
 import { BoxLabelPipe } from '../pipes/box-label-pipe';
@@ -22,6 +22,7 @@ import { CardService } from '../services/card/card.service';
 export class StudySession {
   private cardService = inject(CardService);
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
 
   readonly deckId = +this.route.snapshot.params['deckId'];
   private readonly box: number | undefined = this.route.snapshot.params['box']
@@ -72,11 +73,19 @@ export class StudySession {
       this.demote();
     } else if (event.code === 'ArrowDown') {
       this.skip();
+    } else if (event.code === 'ArrowUp') {
+      this.editCard();
     }
   }
 
   skip() {
     this.nextCard();
+  }
+
+  editCard() {
+    const card = this.currentCard();
+    if (!card) return;
+    this.router.navigate(['/flashcard/deck', this.deckId, 'card', card.id]);
   }
 
   async promote() {

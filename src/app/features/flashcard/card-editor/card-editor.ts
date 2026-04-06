@@ -5,6 +5,7 @@ import { MAX_BOX, MIN_BOX, type Box } from '../../../shared/models/box';
 import { Card } from '../../../shared/models/card';
 import { MarkdownPipe } from '../../../shared/pipes/markdown-pipe';
 import { CardService } from '../../../shared/services/card/card.service';
+import { TagService } from '../../../shared/services/tag/tag.service';
 
 @Component({
   selector: 'app-card-editor',
@@ -14,6 +15,7 @@ import { CardService } from '../../../shared/services/card/card.service';
 })
 export class CardEditor {
   private cardService = inject(CardService);
+  private tagService = inject(TagService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
@@ -34,7 +36,18 @@ export class CardEditor {
     loader: ({ params }) => this.cardService.get(params.id),
   });
 
-  readonly cardModel = linkedSignal<Omit<Card, 'id' | 'deck_id' | 'user_id' | 'created_at'>>(() => {
+  readonly tags = resource({
+    loader: () => this.tagService.query(),
+  });
+
+  readonly selectedTagIds = linkedSignal<Set<number>>(() => {
+    const card = this.card.value();
+    return new Set(card?.tags.map((t) => t.id) ?? []);
+  });
+
+  readonly cardModel = linkedSignal<
+    Omit<Card, 'id' | 'deck_id' | 'user_id' | 'created_at' | 'tags'>
+  >(() => {
     const card = this.card.value();
     return {
       front: card?.front ?? '',
@@ -50,22 +63,39 @@ export class CardEditor {
     max(schemaPath.box, MAX_BOX);
   });
 
+  toggleTag(tagId: number) {
+    this.selectedTagIds.update((ids) => {
+      const next = new Set(ids);
+      if (next.has(tagId)) {
+        next.delete(tagId);
+      } else {
+        next.add(tagId);
+      }
+      return next;
+    });
+  }
+
   onSubmit(event: Event) {
     event.preventDefault();
     void submit(this.cardForm, async () => {
       try {
+        let savedCardId: number;
         if (this.cardId) {
           await this.cardService.update(this.cardId, this.cardModel());
+          savedCardId = this.cardId;
         } else {
-          await this.cardService.create({
+          const created = await this.cardService.create({
             deck_id: this.deckId,
             front: this.cardModel().front,
             back: this.cardModel().back,
           });
+          savedCardId = created.id;
         }
+        await this.tagService.setTags(savedCardId, [...this.selectedTagIds()]);
         if (this.next()) {
           this.next.set(false);
           this.cardModel.set({ front: '', back: '', box: MIN_BOX });
+          this.selectedTagIds.set(new Set());
         } else {
           this.router.navigateByUrl('/flashcard/deck/' + this.deckId + '/browse');
         }

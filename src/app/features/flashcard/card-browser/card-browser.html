@@ -61,6 +61,9 @@
         <li class="list-group-item d-flex justify-content-between align-items-center">
           <small class="text-truncate me-3" [innerHTML]="card.front | markdown"></small>
           <div class="d-flex gap-2 flex-shrink-0 align-items-center">
+            @for (tag of card.tags; track tag.id) {
+              <span class="badge bg-info fw-normal">{{ tag.name }}</span>
+            }
             @if (selectedBox() === boxes[0]) {
               <small class="text-body-secondary">{{ card.box | boxLabel }}</small>
             }

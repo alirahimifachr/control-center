@@ -11,10 +11,7 @@ export class TagService {
   private auth = inject(Auth);
 
   async query(): Promise<Tag[]> {
-    const { data, error } = await this.supabase.client
-      .from('tags')
-      .select('*')
-      .order('name');
+    const { data, error } = await this.supabase.client.from('tags').select('*').order('name');
     if (error) throw error;
     return data;
   }
@@ -32,6 +29,29 @@ export class TagService {
 
   async delete(id: number): Promise<void> {
     const { error } = await this.supabase.client.from('tags').delete().eq('id', id);
+    if (error) throw error;
+  }
+
+  async setTags(cardId: number, tagIds: number[]): Promise<void> {
+    const { error: deleteError } = await this.supabase.client
+      .from('card_tags')
+      .delete()
+      .eq('card_id', cardId);
+    if (deleteError) throw deleteError;
+
+    if (tagIds.length > 0) {
+      const rows = tagIds.map((tag_id) => ({ card_id: cardId, tag_id }));
+      const { error: insertError } = await this.supabase.client.from('card_tags').insert(rows);
+      if (insertError) throw insertError;
+    }
+  }
+
+  async removeTag(cardId: number, tagId: number): Promise<void> {
+    const { error } = await this.supabase.client
+      .from('card_tags')
+      .delete()
+      .eq('card_id', cardId)
+      .eq('tag_id', tagId);
     if (error) throw error;
   }
 

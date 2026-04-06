@@ -11,45 +11,41 @@ export class CardService {
   private auth = inject(Auth);
 
   async query(deckId: number): Promise<Card[]> {
-    const { data, error } = await this.supabase.client
-      .from('cards')
-      .select('*')
-      .eq('deck_id', deckId)
-      .order('created_at', { ascending: false });
-
+    const { data, error } = await this.supabase.client.rpc('get_cards', {
+      p_deck_id: deckId,
+    });
     if (error) throw error;
     return data;
   }
 
   async get(id: number): Promise<Card> {
-    const { data, error } = await this.supabase.client
-      .from('cards')
-      .select('*')
-      .eq('id', id)
-      .single();
+    const { data, error } = await this.supabase.client.rpc('get_card', {
+      p_card_id: id,
+    });
     if (error) throw error;
-    return data;
+    return data[0];
   }
 
   async create(card: Pick<Card, 'deck_id' | 'front' | 'back'>): Promise<Card> {
-    const { data, error } = await this.supabase.client
+    const { error } = await this.supabase.client
       .from('cards')
-      .insert({ ...card, user_id: this.auth.user()!.id })
-      .select()
-      .single();
+      .insert({ ...card, user_id: this.auth.user()!.id });
     if (error) throw error;
-    return data;
+    const { data, error: fetchError } = await this.supabase.client.rpc('get_cards', {
+      p_deck_id: card.deck_id,
+    });
+    if (fetchError) throw fetchError;
+    return data[0];
   }
 
   async update(id: number, changes: Partial<Pick<Card, 'front' | 'back' | 'box'>>): Promise<Card> {
-    const { data, error } = await this.supabase.client
-      .from('cards')
-      .update(changes)
-      .eq('id', id)
-      .select()
-      .single();
+    const { error } = await this.supabase.client.from('cards').update(changes).eq('id', id);
     if (error) throw error;
-    return data;
+    const { data, error: fetchError } = await this.supabase.client.rpc('get_card', {
+      p_card_id: id,
+    });
+    if (fetchError) throw fetchError;
+    return data[0];
   }
 
   async delete(id: number): Promise<void> {

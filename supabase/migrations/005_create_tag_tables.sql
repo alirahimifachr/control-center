@@ -34,3 +34,132 @@ create policy "Users manage own card_tags"
 
 -- Drop legacy jsonb tags column from cards
 alter table public.cards drop column tags;
+
+-- Helper: get tags for a card as a jsonb array
+create or replace function public.get_card_tags(p_card_id int8)
+returns jsonb
+language sql
+stable
+security invoker
+set search_path = ''
+as $$
+  select coalesce(
+    jsonb_agg(jsonb_build_object(
+      'id', t.id,
+      'user_id', t.user_id,
+      'name', t.name,
+      'created_at', t.created_at
+    ) order by t.name),
+    '[]'::jsonb
+  )
+  from public.card_tags ct
+  join public.tags t on t.id = ct.tag_id
+  where ct.card_id = p_card_id;
+$$;
+
+-- Update get_study_cards to include tags
+create or replace function public.get_study_cards(p_deck_id int8)
+returns table (
+  id int8,
+  deck_id int8,
+  user_id uuid,
+  box int,
+  front text,
+  back text,
+  created_at timestamptz,
+  tags jsonb
+)
+language sql
+stable
+security invoker
+set search_path = ''
+as $$
+  select c.id, c.deck_id, c.user_id, c.box, c.front, c.back, c.created_at,
+         public.get_card_tags(c.id) as tags
+  from (
+    (
+      select * from public.cards
+      where deck_id = p_deck_id and box = 0
+      order by random()
+      limit (select new_cards_per_session from public.decks where id = p_deck_id)
+    )
+    union all
+    (
+      select * from public.cards
+      where deck_id = p_deck_id and box between 1 and 7
+      order by random()
+      limit (select review_cards_per_session from public.decks where id = p_deck_id)
+    )
+  ) c;
+$$;
+
+-- Update get_box_cards to include tags
+create or replace function public.get_box_cards(p_deck_id int8, p_box int)
+returns table (
+  id int8,
+  deck_id int8,
+  user_id uuid,
+  box int,
+  front text,
+  back text,
+  created_at timestamptz,
+  tags jsonb
+)
+language sql
+stable
+security invoker
+set search_path = ''
+as $$
+  select c.id, c.deck_id, c.user_id, c.box, c.front, c.back, c.created_at,
+         public.get_card_tags(c.id) as tags
+  from public.cards c
+  where c.deck_id = p_deck_id and c.box = p_box
+  order by random();
+$$;
+
+-- Get all cards for a deck with tags
+create or replace function public.get_cards(p_deck_id int8)
+returns table (
+  id int8,
+  deck_id int8,
+  user_id uuid,
+  box int,
+  front text,
+  back text,
+  created_at timestamptz,
+  tags jsonb
+)
+language sql
+stable
+security invoker
+set search_path = ''
+as $$
+  select c.id, c.deck_id, c.user_id, c.box, c.front, c.back, c.created_at,
+         public.get_card_tags(c.id) as tags
+  from public.cards c
+  where c.deck_id = p_deck_id
+  order by c.created_at desc;
+$$;
+
+-- Get a single card with tags
+create or replace function public.get_card(p_card_id int8)
+returns table (
+  id int8,
+  deck_id int8,
+  user_id uuid,
+  box int,
+  front text,
+  back text,
+  created_at timestamptz,
+  tags jsonb
+)
+language sql
+stable
+security invoker
+set search_path = ''
+as $$
+  select c.id, c.deck_id, c.user_id, c.box, c.front, c.back, c.created_at,
+         public.get_card_tags(c.id) as tags
+  from public.cards c
+  where c.id = p_card_id;
+$$;

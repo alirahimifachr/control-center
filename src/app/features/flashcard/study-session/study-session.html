@@ -21,7 +21,14 @@
 
     <div class="card">
       <div class="card-body">
-        <small class="text-body-secondary">{{ card.box | boxLabel }}</small>
+        <div class="d-flex justify-content-between">
+          <small class="text-body-secondary">{{ card.box | boxLabel }}</small>
+          <div class="d-flex gap-1">
+            @for (tag of card.tags; track tag.id) {
+              <span class="badge bg-info fw-normal">{{ tag.name }}</span>
+            }
+          </div>
+        </div>
         <hr />
         <div class="mb-3" [innerHTML]="card.front | markdown"></div>
 

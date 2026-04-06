@@ -57,15 +57,34 @@
       </div>
     }
 
-    <div class="mb-3 d-flex align-items-end gap-3">
-      <label for="box" class="form-label">Box ({{ MIN_BOX }}–{{ MAX_BOX }})</label>
-      <input
-        type="number"
-        id="box"
-        [formField]="cardForm.box"
-        class="form-control shadow-sm w-auto"
-        [class.is-invalid]="cardForm.box().touched() && cardForm.box().invalid()"
-      />
+    <div class="d-flex justify-content-between mb-3 gap-5">
+      @if (tags.hasValue() && tags.value()!.length > 0) {
+        <div class="d-flex flex-wrap gap-2">
+          @for (tag of tags.value(); track tag.id) {
+            <button
+              type="button"
+              class="badge border-0"
+              [class]="
+                selectedTagIds().has(tag.id) ? 'bg-info' : 'bg-body-tertiary text-body-secondary'
+              "
+              (click)="toggleTag(tag.id)"
+            >
+              {{ tag.name }}
+            </button>
+          }
+        </div>
+      }
+
+      <div class="d-flex align-items-end gap-3">
+        <label for="box" class="form-label">Box ({{ MIN_BOX }}–{{ MAX_BOX }})</label>
+        <input
+          type="number"
+          id="box"
+          [formField]="cardForm.box"
+          class="form-control shadow-sm w-auto"
+          [class.is-invalid]="cardForm.box().touched() && cardForm.box().invalid()"
+        />
+      </div>
     </div>
 
     <div class="d-flex justify-content-end gap-2 mb-3">

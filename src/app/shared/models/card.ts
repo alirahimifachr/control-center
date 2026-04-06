@@ -1,3 +1,5 @@
+import { Tag } from './tag';
+
 export interface Card {
   id: number;
   deck_id: number;
@@ -6,4 +8,5 @@ export interface Card {
   front: string;
   back: string;
   created_at: string;
+  tags: Tag[];
 }

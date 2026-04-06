@@ -1,7 +1,15 @@
-import { Component, computed, HostListener, inject, signal, resource, viewChild } from '@angular/core';
+import {
+  Component,
+  computed,
+  HostListener,
+  inject,
+  resource,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { MarkdownPipe } from '../../../shared/pipes/markdown-pipe';
 import { Whiteboard } from '../../../shared/directives/whiteboard';
+import { MarkdownPipe } from '../../../shared/pipes/markdown-pipe';
 import { BoxLabelPipe } from '../pipes/box-label-pipe';
 import { CardService } from '../services/card/card.service';
 
@@ -36,7 +44,13 @@ export class StudySession {
   readonly currentCard = computed(() => this.cards.value()?.[this.currentIndex()]);
   readonly progress = computed(() => {
     const total = this.cards.value()?.length ?? 0;
-    return total ? Math.round((this.currentIndex() / total) * 100) : 0;
+    if (total) {
+      return this.currentIndex()
+        ? Math.round(((this.currentIndex() + 1) / total) * 100)
+        : Math.round((1 / total) * 100);
+    } else {
+      return 0;
+    }
   });
   readonly done = computed(() => {
     const cards = this.cards.value();

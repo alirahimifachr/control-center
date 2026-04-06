@@ -50,7 +50,7 @@
         <textarea
           id="back"
           class="form-control"
-          rows="10"
+          rows="15"
           [formField]="cardForm.back"
           [class.is-invalid]="cardForm.back().touched() && cardForm.back().invalid()"
         ></textarea>
@@ -64,6 +64,7 @@
         id="box"
         [formField]="cardForm.box"
         class="form-control shadow-sm w-auto"
+        [class.is-invalid]="cardForm.box().touched() && cardForm.box().invalid()"
       />
     </div>
 

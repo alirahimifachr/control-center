@@ -35,7 +35,7 @@
         <div class="mt-1">
           @for (b of boxes; track b) {
             <span
-              class="badge mt-2"
+              class="badge mt-2 me-1"
               [class]="deck.box_counts[b] ? 'bg-secondary' : 'bg-body-tertiary text-body-secondary'"
               >{{ boxLabels[b] }}: {{ deck.box_counts[b] || 0 }}</span
             >

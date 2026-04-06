@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FlashcardMain } from './flashcard-main';
+import { DeckBrowser } from './deck-browser';
 
-describe('FlashcardMain', () => {
-  let component: FlashcardMain;
-  let fixture: ComponentFixture<FlashcardMain>;
+describe('DeckBrowser', () => {
+  let component: DeckBrowser;
+  let fixture: ComponentFixture<DeckBrowser>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FlashcardMain],
+      imports: [DeckBrowser],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(FlashcardMain);
+    fixture = TestBed.createComponent(DeckBrowser);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

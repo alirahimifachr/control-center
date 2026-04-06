@@ -1,16 +1,15 @@
 import { Component, inject, resource, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { BOXES, BOX_SHORT_LABELS } from '../models/box';
-import type { DeckWithStats } from '../models/deck';
 import { DeckService } from '../services/deck/deck.service';
 
 @Component({
-  selector: 'app-flashcard-main',
+  selector: 'app-deck-browser',
   imports: [RouterLink],
-  templateUrl: './flashcard-main.html',
-  styleUrl: './flashcard-main.scss',
+  templateUrl: './deck-browser.html',
+  styleUrl: './deck-browser.scss',
 })
-export class FlashcardMain {
+export class DeckBrowser {
   private deckService = inject(DeckService);
 
   readonly boxes = BOXES;

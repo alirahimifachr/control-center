@@ -3,7 +3,7 @@ import { Routes } from '@angular/router';
 export const flashcard_routes: Routes = [
   {
     path: '',
-    loadComponent: () => import('./flashcard-main/flashcard-main').then((m) => m.FlashcardMain),
+    loadComponent: () => import('./deck-browser/deck-browser').then((m) => m.DeckBrowser),
   },
   {
     path: 'deck',

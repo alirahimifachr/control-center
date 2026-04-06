@@ -12,8 +12,7 @@
     <span class="spinner-border"></span>
   </div>
 } @else if (!done()) {
-  @let card = currentCard();
-  @if (card) {
+  @if (currentCard(); as card) {
     <div class="progress mb-4">
       <div class="progress-bar" [style.width.%]="progress()">
         {{ currentIndex() + 1 }} / {{ cards.value()!.length }}
@@ -76,7 +75,9 @@
           <small class="text-danger">Demoted</small>
         </div>
       </div>
-      <a [routerLink]="['/flashcard/deck', deckId, 'browse']" class="btn btn-primary">Back to Deck</a>
+      <a [routerLink]="['/flashcard/deck', deckId, 'browse']" class="btn btn-primary"
+        >Back to Deck</a
+      >
     </div>
   </div>
 }

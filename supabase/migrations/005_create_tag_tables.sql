@@ -35,6 +35,10 @@ create policy "Users manage own card_tags"
 -- Drop legacy jsonb tags column from cards
 alter table public.cards drop column tags;
 
+-- Drop old functions so we can recreate with new return types
+drop function if exists public.get_study_cards(int8);
+drop function if exists public.get_box_cards(int8, int);
+
 -- Helper: get tags for a card as a jsonb array
 create or replace function public.get_card_tags(p_card_id int8)
 returns jsonb
